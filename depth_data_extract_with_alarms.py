@@ -110,8 +110,11 @@ try:
         
         #print rectangle on color image for cyclist's benefit
         cv2.rectangle(color_image, (box_width_min, box_height_min), 
-             (box_width_max, box_height_max), (255, 255, 255), 2)
-
+             (box_width_max, box_height_max), (0, 255, 0), 2)
+        
+        #BGR values for green (0,255,0)
+        #BGR values for green (255,255,255) 
+        
         #creating an 'image' with dimensions as shown below to display the distance information stacked below the color image
         dist_bar_height = 100
         distance_bar = np.zeros([dist_bar_height,orig_width,3], dtype=np.uint8)     #numpy array that will represent the 'image' or bar to print the distance measurement 
@@ -120,8 +123,8 @@ try:
         distance_bar.fill(255)
 
         #print distance measurement onto the distance bar image 
-        cv2.putText(distance_bar, "Average distance to object: "+avg_dist_str +" m", 
-            (70,50),
+        cv2.putText(distance_bar, "Distance to object: "+avg_dist_str +" m", 
+            (100,80),
             cv2.FONT_HERSHEY_COMPLEX, 0.75, (255,0,0))
         
         
@@ -130,14 +133,23 @@ try:
        
         if avg_dist_float > alarm_dist2 and avg_dist_float < alarm_dist1:
             text_color_tuple = (0,165,255)  #orange
-            cv2.putText(distance_bar, f"Object is within {alarm_dist2} and {alarm_dist1}!", 
-            (70,70),
+            cv2.putText(distance_bar, f"Warning: Object is within {alarm_dist2}m and {alarm_dist1}m!", 
+            (60,50),
             cv2.FONT_HERSHEY_COMPLEX, 0.75, text_color_tuple)
+            
+            #Changing rectangle color
+            cv2.rectangle(color_image, (box_width_min, box_height_min), 
+             (box_width_max, box_height_max), (0,165,255), 2)
+        
         elif avg_dist_float > alarm_dist3 and avg_dist_float < alarm_dist2:
             text_color_tuple = (0,0,255)  #red
-            cv2.putText(distance_bar, f"Object is within {alarm_dist3} and {alarm_dist2}!", 
-            (70,70),
+            cv2.putText(distance_bar, f"Warning: Object is within {alarm_dist3}m and {alarm_dist2}m!", 
+            (60,50),
             cv2.FONT_HERSHEY_COMPLEX, 0.75, text_color_tuple)
+            
+            #Changing rectangle color
+            cv2.rectangle(color_image, (box_width_min, box_height_min), 
+             (box_width_max, box_height_max), (0,0,255), 2)
             
         #stack images vertically for displaying
         images = np.vstack((color_image,distance_bar))
